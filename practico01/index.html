@@ -10,11 +10,29 @@
 <body>
     <div class="site-components">
         <div id="app" class='container mt-3'>
-            <p>Nombre: {{ nombre }} </p>
-            <p>Edad: {{ edad }} </p>
-            <p>Ciudad: {{ ciudad }} </p>
-            <hr>
-            <p>Hola! Mi nombre es {{nombre}}, tengo {{edad}} años y vivo en la ciudad de {{ciudad}} </p>
+
+            <div id="Paso2" class="card mb-3">
+                <div class="card-header p-3">
+                    <h2>Paso #2</h2>
+                    <p>Nombre: {{ nombre }} </p>
+                    <p>Edad: {{ edad }} </p>
+                    <p>Ciudad: {{ ciudad }} </p>
+                    <hr>
+                    <p>Hola! Mi nombre es {{nombre}}, tengo {{edad}} años y vivo en la ciudad de {{ciudad}} </p>
+                </div>
+            </div>
+
+            <div id="Paso3" class="card mb-3">
+                <div class="card-header p-3">
+                    <h2>Paso #3</h2>
+                    <div class="card-body">
+                        <p>Contador: {{ contador }} </p>
+                        <button @click="incrementar" >Incrementar</button>
+                        <button @click="decrementar" >Decrementar</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         
 
@@ -26,7 +44,16 @@
             data: {
                 nombre: "Ana García",
                 edad: 30,
-                ciudad: "Tupungato"
+                ciudad: "Tupungato",
+                contador: 0
+            },
+            methods: {
+                incrementar (){
+                    this.contador++;
+                },
+                decrementar() {
+                    this.contador--;
+                }
             }
         })
 
