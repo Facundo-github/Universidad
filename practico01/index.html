@@ -33,6 +33,36 @@
                 </div>
             </div>
 
+            <div id="Paso4" class="card mb-4">
+                <div class="card-header p-3">
+                    <h2>Paso #4</h2>
+                    <div class="card-body">
+                        <p>Lista de Tareas</p>
+                            
+                        <div class="input-group mb-3">
+                            <input type="text" @keyup.enter="agregarTarea" v-model="nuevaTarea" class="form-control" placeholder="Escribe una nueva tarea">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" @click="agregarTarea" >Añadir Tarea</button>
+                            </div>
+                        </div>
+                                           
+                            <ul class="list-group mb-3">
+                                <li v-for="tarea in tareas" :key="tarea.id" class="list-group-item d-flex justify-content-between align-items-center" >
+                                <div>
+                                    <input type="checkbox" v-model="tarea.completada" class="mr-2">
+                                    <span :class="{ 'text-muted' : tarea.completada }"> {{ tarea.texto }} </span>
+                                </div>
+                                </li>
+                            </ul>
+
+                            <p>Total de Tareas: {{ totalTareas }} </p>
+                            <p>Tareas Pendientes: {{ tareasPendientes }} </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
         
 
@@ -45,7 +75,13 @@
                 nombre: "Ana García",
                 edad: 30,
                 ciudad: "Tupungato",
-                contador: 0
+                contador: 0,
+                nuevaTarea: "",
+                tareas: [{
+                    id: 1,
+                    texto: "Aprender Vue",
+                    completada: false
+                }]
             },
             methods: {
                 incrementar (){
@@ -53,6 +89,21 @@
                 },
                 decrementar() {
                     this.contador--;
+                },
+                agregarTarea() {
+                    if (this.nuevaTarea.trim() !== "" ){
+                        const nuevaId = this.tareas.length +1;
+                        this.tareas.push({id: nuevaId, texto: this.nuevaTarea, completada: false });
+                        this.nuevaTarea = "";
+                    }
+                }
+            },
+            computed: {
+                totalTareas() {
+                    return this.tareas.length;
+                },
+                tareasPendientes() {
+                    return this.tareas.filter(t => !t.completada).length;
                 }
             }
         })
