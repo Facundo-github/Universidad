@@ -3,15 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Trabajo Practico 1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-    <div>
+    <div class="site-components">
+        <div id="app" class='container mt-3'>
+            <p>Nombre: {{ nombre }} </p>
+            <p>Edad: {{ edad }} </p>
+            <p>Ciudad: {{ ciudad }} </p>
+            <hr>
+            <p>Hola! Mi nombre es {{nombre}}, tengo {{edad}} años y vivo en la ciudad de {{ciudad}} </p>
+        </div>
+        
 
     </div>
 
     <script>
-        
+        var app = new Vue({
+            el: '#app',
+            data: {
+                nombre: "Ana García",
+                edad: 30,
+                ciudad: "Tupungato"
+            }
+        })
+
     </script>
 
 </body>
