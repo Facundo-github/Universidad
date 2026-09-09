@@ -14,54 +14,74 @@
             <div id="Paso2" class="card mb-3">
                 <div class="card-header p-3">
                     <h2>Paso #2</h2>
+                </div>
+                <div class="card-body">
                     <p>Nombre: {{ nombre }} </p>
                     <p>Edad: {{ edad }} </p>
                     <p>Ciudad: {{ ciudad }} </p>
                     <hr>
                     <p>Hola! Mi nombre es {{nombre}}, tengo {{edad}} años y vivo en la ciudad de {{ciudad}} </p>
                 </div>
+                    
+                
             </div>
 
             <div id="Paso3" class="card mb-3">
                 <div class="card-header p-3">
                     <h2>Paso #3</h2>
-                    <div class="card-body">
-                        <p>Contador: {{ contador }} </p>
-                        <button @click="incrementar" >Incrementar</button>
-                        <button @click="decrementar" >Decrementar</button>
-                    </div>
                 </div>
+                    
+                <div class="card-body">
+                    <p>Contador: {{ contador }} </p>
+                    <button @click="incrementar" >Incrementar</button>
+                    <button @click="decrementar" >Decrementar</button>
+                </div>
+                
             </div>
 
             <div id="Paso4" class="card mb-4">
-                <div class="card-header p-3">
+                <div class="card-header p3">
                     <h2>Paso #4</h2>
-                    <div class="card-body">
-                        <p>Lista de Tareas</p>
-                            
-                        <div class="input-group mb-3">
-                            <input type="text" @keyup.enter="agregarTarea" v-model="nuevaTarea" class="form-control" placeholder="Escribe una nueva tarea">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" @click="agregarTarea" >Añadir Tarea</button>
-                            </div>
+                </div>
+                <div class="card-body">
+                    <p>Lista de Tareas</p>
+                    <div class="input-group mb-3">
+                        <input type="text" @keyup.enter="agregarTarea" v-model="nuevaTarea" class="form-control" placeholder="Escribe una nueva tarea">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" @click="agregarTarea" >Añadir Tarea</button>
                         </div>
-                                           
-                            <ul class="list-group mb-3">
-                                <li v-for="tarea in tareas" :key="tarea.id" class="list-group-item d-flex justify-content-between align-items-center" >
-                                <div>
-                                    <input type="checkbox" v-model="tarea.completada" class="mr-2">
-                                    <span :class="{ 'text-muted' : tarea.completada }"> {{ tarea.texto }} </span>
-                                </div>
-                                </li>
-                            </ul>
-
-                            <p>Total de Tareas: {{ totalTareas }} </p>
-                            <p>Tareas Pendientes: {{ tareasPendientes }} </p>
-                        </div>
-
                     </div>
+
+                    <ul class="list-group mb-3">
+                        <li v-for="tarea in tareas" :key="tarea.id" class="list-group-item d-flex justify-content-between align-items-center" >
+                            <div>
+                                <input type="checkbox" v-model="tarea.completada" class="mr-2">
+                                <span :class="{ 'text-muted' : tarea.completada }"> {{ tarea.texto }} </span>
+                            </div>
+                        </li>
+                    </ul>
+                    <p>Total de tareas: {{ totalTareas }} </p>
+                    <p>Tareas pendientes: {{ tareasPendientes }} </p>
                 </div>
             </div>
+
+            <div id="Paso5" class="card mb-4">
+                <div class="card-header p-3">
+                    <h2>Paso #5</h2>
+                </div>
+                <div class="card-body">
+                    <p>Lista de Eventos</p>
+                    <ul class="list-group">
+                        <li v-for="evento in listaEventos" :key="evento.id" class="list-group-item" >
+                            {{ evento.id }} - {{ evento.nombre }} - {{ evento.timestamp }}
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            
+
+            
 
         </div>
         
@@ -81,21 +101,33 @@
                     id: 1,
                     texto: "Aprender Vue",
                     completada: false
-                }]
+                }],
+                listaEventos: []
             },
             methods: {
                 incrementar (){
+                    this._accionUsuario = true;
                     this.contador++;
                 },
                 decrementar() {
+                    this._accionUsuario = true;
                     this.contador--;
                 },
                 agregarTarea() {
                     if (this.nuevaTarea.trim() !== "" ){
+                        this._accionUsuario = true;
                         const nuevaId = this.tareas.length +1;
                         this.tareas.push({id: nuevaId, texto: this.nuevaTarea, completada: false });
                         this.nuevaTarea = "";
                     }
+                },
+                registrarEvento(nombre) {
+                    const nuevoId = this.listaEventos.length +1;
+                    this.listaEventos.push({
+                        id: nuevoId,
+                        nombre: nombre,
+                        timestamp: Date.now()
+                    });
                 }
             },
             computed: {
@@ -105,8 +137,38 @@
                 tareasPendientes() {
                     return this.tareas.filter(t => !t.completada).length;
                 }
+            },
+            beforeCreate() {
+                console.log("berofeCreate ejecutando")
+            },
+            created() {
+                this._accionUsuario = false;
+                this.registrarEvento("created");
+            },
+            beforeMount() {
+                this.registrarEvento("beforeMount");
+            },
+            mounted() {
+                this.registrarEvento("mounted");
+            },
+            beforeUpdate() {
+                if (!this._accionUsuario) return;
+                this.registrarEvento("beforeUpdate");
+            },
+            updated() {
+                if(!this._accionUsuario) return;
+
+                this._accionUsuario = false;
+                this.registrarEvento("updated")
+            },
+            beforeDestroy() {
+                this.registrarEvento("beforeDestroy");
+            },
+            destroyed() {
+                this.registrarEvento("destroyed");
             }
-        })
+
+        });
 
     </script>
 
