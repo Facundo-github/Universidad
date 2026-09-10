@@ -89,8 +89,12 @@
                 <div class="card-body">
                     <p>Lista de Posts</p>
                     <ul class="list-group">
-                        <li v-for="post in posts" :key="post.id" class="list-group-item" @click="cargarComentarios(post.id)">
-                            {{ post.id }} - {{ post.title }}
+                        <li v-for="post in posts" 
+                        :key="post.id" 
+                        class="list-group-item" 
+                        @click="cargarComentarios(post.id)"
+                        :class="{ 'list-group-item-dark' : selectedPostId === post.id }">
+                        {{ post.id }} - {{ post.title }}
                         </li>
                     </ul>
                     <p class="mt-3">Comentarios del Post Seleccionado</p>
@@ -127,6 +131,7 @@
                 listaEventos: [],
                 posts: [],
                 comments: [],
+                selectedPostId: null,
             },
             methods: {
                 incrementar (){
@@ -163,6 +168,7 @@
                 },
                 async cargarComentarios(postId) {
                     this.comments = await this.obtenerComments(postId);
+                    this.selectedPostId = postId;
                 }
             },
             computed: {
