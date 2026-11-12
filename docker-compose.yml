@@ -1,26 +1,47 @@
 services:
-    
-    postgres:
-      image: postgres:16
 
-      container_name: postgres
-      
-      env_file:
-        - .env
+  postgres:
+    image: postgres:16
 
-      environment:
-        POSTGRES_DB: ${DB_NAME}
-        POSTGRES_USER: ${DB_USER}
-        POSTGRES_PASSWORD: ${DB_PASSWORD}
-    
-      ports:
-        - "5432:5432"
+    container_name: postgres
 
-      volumes:
-        - ./postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
 
-      networks:
-        - red
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+    networks:
+      - red
+
+  django:
+    image: pwa2026tp2:0.1
+
+    build:
+      context: ./config/django-image
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./backend:/usr/src/app
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - postgres
+
+    networks:
+      - red
 
 networks:
   red:
